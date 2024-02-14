@@ -1,0 +1,31 @@
+{
+  "cars": [
+    {
+      "primaryColor": "#f00",
+      "secondaryColor": "#f77",
+      "tickColor": "#f00",
+      "value": "red",
+      "displayName": "Красный",
+      "previewImage": "./assets/red.png",
+      "finalImage": "./assets/red-final.png"
+    },
+    {
+      "primaryColor": "#0f0",
+      "secondaryColor": "#f77",
+      "tickColor": "#f00",
+      "value": "green",
+      "displayName": "Зеленый",
+      "previewImage": "./assets/red.png",
+      "finalImage": "./assets/red-final.png"
+    },
+    {
+      "primaryColor": "#00f",
+      "secondaryColor": "#f77",
+      "tickColor": "#f00",
+      "value": "blue",
+      "displayName": "Синий",
+      "previewImage": "./assets/red.png",
+      "finalImage": "./assets/red-final.png"
+    }
+  ]
+}

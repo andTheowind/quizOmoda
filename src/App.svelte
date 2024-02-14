@@ -1,10 +1,20 @@
 <script lang="ts">
-  import QuizCard from "./components/QuizCard.svelte";
+  import CardHeader from "./components/CardHeader.svelte";
   import HeaderQuiz from "./components/HeaderQuiz.svelte";
   import FooterQuiz from "./components/FooterQuiz.svelte";
   import CardColumn from "./components/CardColumn.svelte";
 
   import { windowSize } from "@sveu/browser";
+  import CarInfoStore, { type CarInfo } from "./stores/carInfoStore";
+  import QuizCard from "./components/QuizCard.svelte";
+  import RadioColoredList from "./components/RadioColoredList.svelte";
+  import RadioList from "./components/RadioList.svelte";
+
+  let carVariants: any[] = [];
+  CarInfoStore.subscribe((data) => {
+    carVariants = [...data.variants];
+  });
+
   const { width } = windowSize();
   $: isMobile = $width < 992;
 
@@ -29,6 +39,10 @@
         currentPageValue = selectedPaymentMethod;
         break;
     }
+  }
+
+  function getVariantByValue(value: string): CarInfo | undefined {
+    return carVariants.find((variant) => variant.value === value);
   }
 
   function nextPage() {
@@ -64,27 +78,24 @@
   function onPaymentMethodChange(event?: any) {
     selectedPaymentMethod = event.detail.value;
   }
-
-  function finalContainer(event?: any) {
-    selectedPaymentMethod = event.detail.value;
-  }
 </script>
 
 <HeaderQuiz></HeaderQuiz>
 
 <main>
-
   <section class="pages">
     <div class="container my-4">
       <div class="row">
         <CardColumn>
           <div class="page" class:selected={currentPage === 1}>
-            <QuizCard
-              index={1}
-              title="Выберите цвет"
-              variants={["Красный", "Синий", "Черный"]}
-              on:change={onColorChange}
-            />
+            <QuizCard>
+              <CardHeader slot="cardHeader" index={1} title="Выберите цвет" />
+              <RadioColoredList
+                variants={carVariants}
+                bind:selectedValue={selectedColor}
+                on:change={onColorChange}
+              />
+            </QuizCard>
           </div>
         </CardColumn>
         <CardColumn>
@@ -93,12 +104,23 @@
             class:inactive={!selectedColor}
             class:selected={currentPage === 2}
           >
-            <QuizCard
-              index={2}
-              title="Планируете ли сдавать свой авто в trade-in?"
-              variants={["Да", "Нет", "Еще не определился"]}
-              on:change={onTradeInChange}
-            />
+            <QuizCard>
+              <CardHeader
+                slot="cardHeader"
+                index={2}
+                title="Планируете ли сдавать свой авто в trade-in?"
+              />
+              <RadioList
+                variants={[
+                  { value: "yes", displayName: "Да" },
+                  { value: "no", displayName: "Нет" },
+                  { value: "maybe", displayName: "Еще не определился" },
+                ]}
+                bind:selectedValue={selectedTradeIn}
+                on:change={onTradeInChange}
+                disabled={!selectedColor}
+              />
+            </QuizCard>
           </div>
         </CardColumn>
         <CardColumn>
@@ -107,12 +129,24 @@
             class:inactive={!selectedTradeIn}
             class:selected={currentPage === 3}
           >
-            <QuizCard
-              index={3}
-              title="Как планируете приобретать автомобиль:"
-              variants={["Кредит", "Наличные", "Лизинг", "Рассрочка"]}
-              on:change={onPaymentMethodChange}
-            />
+            <QuizCard>
+              <CardHeader
+                slot="cardHeader"
+                index={3}
+                title="Как планируете приобретать автомобиль?"
+              />
+              <RadioList
+                variants={[
+                  { value: "credit", displayName: "Кредит" },
+                  { value: "cash", displayName: "Наличные" },
+                  { value: "leasing", displayName: "Лизинг" },
+                  { value: "installment", displayName: "Рассрочка" },
+                ]}
+                bind:selectedValue={selectedPaymentMethod}
+                on:change={onPaymentMethodChange}
+                disabled={!selectedTradeIn}
+              />
+            </QuizCard>
           </div>
         </CardColumn>
       </div>
@@ -120,7 +154,7 @@
   </section>
 
   {#if isMobile}
-    <div class="controls" >
+    <div class="controls">
       <button on:click={previousPage} disabled={!canGoPreviousPage}>
         Previous
       </button>
@@ -132,12 +166,10 @@
       </button>
     </div>
   {/if}
-  
-  {#if selectedColor && !isMobile  && selectedTradeIn && selectedPaymentMethod || (isMobile && currentPage === 4) }
-    <div class="container">
-      <div class="row">
 
-      </div>
+  {#if (selectedColor && !isMobile && selectedTradeIn && selectedPaymentMethod) || (isMobile && currentPage === 4)}
+    <div class="container">
+      <div class="row"></div>
       <div class="row">
         <CardColumn>
           {selectedColor}
@@ -150,8 +182,13 @@
         </CardColumn>
       </div>
     </div>
+
+    <img
+      src={getVariantByValue(selectedColor)?.previewImage}
+      class:opacity-50={!selectedColor}
+      alt=""
+    />
   {/if}
-    
 </main>
 
 <FooterQuiz></FooterQuiz>

@@ -14,7 +14,11 @@
 
   let dispatch = createEventDispatcher();
   function onChange(event?: any) {
-    dispatch("change", { value: event.target.value });
+    console.log('event = ', event );
+    console.log('event detail = ', event.detail );
+    dispatch("change", { 
+      value: event.detail
+    });
   }
 </script>
 

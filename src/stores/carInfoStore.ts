@@ -6,14 +6,12 @@ export type CarInfo = RadioVariant & {
   finalImage: string;
 };
 
-const carsData: CarInfo[] = await fetch("config.json")
+export async function getCarsData(): Promise< CarInfo[] > {
+
+  return fetch("config.json")
   .then((response) => response.json())
   .then((data) => {
     return data.cars;
   });
 
-export const CarInfoStore = readable({
-  variants: carsData,
-});
-
-export default CarInfoStore;
+}

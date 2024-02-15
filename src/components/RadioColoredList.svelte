@@ -10,7 +10,9 @@
 
   let dispatch = createEventDispatcher();
   function onChange(event?: any) {
-    dispatch("change", { value: event.target.value });
+    dispatch("change", { 
+      value: event.detail
+    });
   }
 </script>
 

@@ -12,11 +12,11 @@
 
   let dispatch = createEventDispatcher();
   function onChange(event?: any) {
-    dispatch("change", { value: event.target.value });
+    dispatch("change", { event: event.target.value });
   }
 </script>
 
-<label>
+<label class="d-flex align-items-center mb-2 pb-1">
   <input
     class="variant"
     type="radio"
@@ -26,7 +26,7 @@
     style="--primary-color: {primaryColor}; --secondary-color: {secondaryColor}; --tick-color: {tickColor};"
     disabled={disabled}
   />
-  {displayName}
+  <span class="d-inline-block ps-2 ms-1 pt-2 pb-2">{displayName}</span>
 </label>
 
 <style lang="scss">

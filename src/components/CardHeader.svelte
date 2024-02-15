@@ -17,19 +17,21 @@
     display: flex;
     align-items: center;
     padding: 5px 0;
-    font-size: 18px;
   }
 
   .card-title p {
     text-align: left;
     margin-bottom: 0;
+    max-width: 254px;
+    font-size: 18px;
+    font-weight: 700;
   }
 
   .card-index {
     display: inline-block;
     background-color: #abbbbe;
     padding: 4px 15px;
-    margin-right: 10px;
+    margin-right: 20px;
     line-height: 1;
   }
 
